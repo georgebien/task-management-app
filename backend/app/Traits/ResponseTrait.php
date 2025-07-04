@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpFoundation\Response;
 
 trait ResponseTrait
@@ -11,11 +12,11 @@ trait ResponseTrait
      * Generate a success response.
      *
      * @param string $message
-     * @param array $data
+     * @param mixed $data
      * 
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function success(string $message, ?array $data = []): JsonResponse
+    protected function success(string $message, $data = []): JsonResponse
     {
         return response()->json([
             'success' => true,
