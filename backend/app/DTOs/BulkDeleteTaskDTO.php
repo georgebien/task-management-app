@@ -5,8 +5,8 @@ namespace App\DTOs;
 final class BulkDeleteTaskDTO
 {
     public function __construct(
-        private string $userId,
-        private array $ids
+        private array $ids,
+        private ?string $userId = null
     ) {}
 
     /**
@@ -19,16 +19,18 @@ final class BulkDeleteTaskDTO
     public static function fromArray(array $data): self
     {
         return new self(
-            userId: $data['user_id'],
-            ids: $data['ids']
+            ids: $data['ids'],
+            userId: $data['user_id'] ?? null
         );
     }
 
-    public function toArray(): array
+    public function getIds(): array
     {
-        return [
-            'ids' => $this->ids,
-            'user_id' => $this->userId,
-        ];
+        return $this->ids;
+    }
+
+    public function getUserId(): ?string
+    {
+        return $this->userId;
     }
 }

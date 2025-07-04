@@ -29,20 +29,20 @@ final class TaskRepository
         ?array $pagination = []
     ): Collection|LengthAwarePaginator {
         $query =  $this->task
-            ->when(!empty($taskFilters->ids), fn ($builder) => (
-                $builder->whereIn('id', $taskFilters->ids)
+            ->when(!empty($taskFilters->getIds()), fn ($builder) => (
+                $builder->whereIn('id', $taskFilters->getIds())
             ))
-            ->when(!empty($taskFilters->statuses), fn ($builder) => (
-                $builder->whereIn('status', $taskFilters->statuses)
+            ->when(!empty($taskFilters->getStatuses()), fn ($builder) => (
+                $builder->whereIn('status', $taskFilters->getStatuses())
             ))
-             ->when($taskFilters->onlyDeleted, fn ($builder) => (
+             ->when($taskFilters->isOnlyDeleted(), fn ($builder) => (
                 $builder->onlyTrashed()
             ))
-            ->when(!is_null($taskFilters->search), fn ($builder) => (
-                $builder->where('title', 'LIKE', "%{$taskFilters->search}%")
+            ->when(!is_null($taskFilters->getSearch()), fn ($builder) => (
+                $builder->where('title', 'LIKE', "%{$taskFilters->getSearch()}%")
             ))
-            ->when(!is_null($taskFilters->orderBy), fn ($builder) => (
-                $builder->orderBy($taskFilters->orderBy, $taskFilters->orderDirection ?? 'asc')
+            ->when(!is_null($taskFilters->getOrderBy()), fn ($builder) => (
+                $builder->orderBy($taskFilters->getOrderBy(), $taskFilters->getOrderDirection() ?? 'asc')
             ));
 
         return !empty($pagination)
@@ -69,12 +69,20 @@ final class TaskRepository
 
     public function bulkDestroy(BulkDeleteTaskDTO $bulkDeleteTaskDTO): bool
     {
-        $data = $bulkDeleteTaskDTO->toArray();
-
         return $this->task
-            ->whereIn('id', $data['ids'])
-            ->where('user_id', $data['user_id'])
+            ->whereIn('id', $bulkDeleteTaskDTO->getIds())
+            ->when(!empty($bulkDeleteTaskDTO->getUserId()), fn ($builder) => (
+                $builder->where('user_id', $bulkDeleteTaskDTO->getUserId())
+            ))
             ->delete();
+    }
+
+    public function bulkForceDestroy(BulkDeleteTaskDTO $bulkDeleteTaskDTO): bool
+    {
+        return $this->task
+            ->onlyTrashed()
+            ->whereIn('id', $bulkDeleteTaskDTO->getIds())
+            ->forceDelete();
     }
 }
 

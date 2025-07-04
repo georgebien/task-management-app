@@ -10,9 +10,9 @@ final class TaskDTO
         private string $userId,
         private string $title,
         private string $status,
-        public ?int $id,
-        private ?string $content,
-        private ?string $imagePath
+        public ?int $id = null,
+        private ?string $content = null,
+        private ?string $imagePath = null,
     ) {}
 
     /**
