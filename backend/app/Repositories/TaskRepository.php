@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\DTOs\BulkDeleteTaskDTO;
 use App\DTOs\TaskDTO;
 use App\Models\Task;
+use Illuminate\Database\Eloquent\Collection;
 
 final class TaskRepository
 {
@@ -26,9 +28,21 @@ final class TaskRepository
         return $task->update($taskDTO->toArray());
     }
 
-    public function findById(string $id): Task
+     public function bulkDestroy(BulkDeleteTaskDTO $bulkDeleteTaskDTO): bool
     {
-        return $this->task->findOrFail($id);
+        $data = $bulkDeleteTaskDTO->toArray();
+
+        return $this->task
+            ->whereIn('id', $data['ids'])
+            ->where('user_id', $data['user_id'])
+            ->delete();
+    }
+
+    public function findByIds(array $ids): Collection
+    {
+        return $this->task
+            ->whereIn('id', $ids)
+            ->get();
     }
 }
 
