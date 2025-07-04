@@ -34,6 +34,15 @@ final class TaskRepository
             ))
             ->when(!empty($taskFilters->statuses), fn ($builder) => (
                 $builder->whereIn('status', $taskFilters->statuses)
+            ))
+             ->when($taskFilters->onlyDeleted, fn ($builder) => (
+                $builder->onlyTrashed()
+            ))
+            ->when(!is_null($taskFilters->search), fn ($builder) => (
+                $builder->where('title', 'LIKE', "%{$taskFilters->search}%")
+            ))
+            ->when(!is_null($taskFilters->orderBy), fn ($builder) => (
+                $builder->orderBy($taskFilters->orderBy, $taskFilters->orderDirection ?? 'asc')
             ));
 
         return !empty($pagination)
@@ -58,7 +67,7 @@ final class TaskRepository
         return $task->update($taskDTO->toArray());
     }
 
-     public function bulkDestroy(BulkDeleteTaskDTO $bulkDeleteTaskDTO): bool
+    public function bulkDestroy(BulkDeleteTaskDTO $bulkDeleteTaskDTO): bool
     {
         $data = $bulkDeleteTaskDTO->toArray();
 

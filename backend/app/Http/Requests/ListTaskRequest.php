@@ -16,6 +16,10 @@ class ListTaskRequest extends TaskRequest
         return [
             'statuses' => 'sometimes|array',
             'statuses.*' => 'sometimes|in:' . implode(',', TaskStatus::getValues()),
+            'only_deleted' => 'sometimes|boolean|in:0,1',
+            'search' => 'sometimes|string|max:255',
+            'order_by' => 'sometimes|in:title,created_at',
+            'order_dir' => 'sometimes|in:asc,desc',
             'page' => 'sometimes|integer|min:1',
             'per_page' => 'sometimes|integer|min:1|max:100',
         ];
