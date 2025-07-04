@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Task;
 
 use App\DTOs\BulkDeleteTaskDTO;
 use App\DTOs\TaskDTO;
+use App\Filters\TaskFilters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteTaskRequest;
+use App\Http\Requests\ListTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\TaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Resources\TaskCollection;
 use App\Models\Task;
 use App\Services\TaskService;
 use App\Traits\ResponseTrait;
@@ -30,12 +33,32 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function list(ListTaskRequest $request)
     {
-        //
+        try {
+            $validated = $request->validated();
+
+            $list = $this->taskService->list(
+                TaskFilters::build($validated),
+                $request->pagination()
+            );
+
+            return $this->success(
+                'Task listed successfully', 
+                new TaskCollection($list)
+            );
+        } catch (Throwable $th) {
+            Log::error('Task listing failed.', [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+                'request' => $request->all(),
+            ]);
+            
+            return $this->error(
+                'Task listing failed', 
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**
@@ -75,7 +98,8 @@ class TaskController extends Controller
     public function update(UpdateTaskRequest $request, string $id): JsonResponse
     {
         try {
-            $task = $this->taskService->findByIds([$id])->first();
+            $filter = TaskFilters::build(['ids' => [$id]]);
+            $task = $this->taskService->list($filter)->first();
 
             $validated = $request->validated();
             $validated['id'] = $task->id;
@@ -107,7 +131,9 @@ class TaskController extends Controller
     {
         try {
             $validated = $request->validated();
-            $tasks = $this->taskService->findByIds($request->input('ids'));
+
+            $filter = TaskFilters::build(['ids' => $request->input('ids')]);
+            $tasks = $this->taskService->list($filter);
 
             $this->taskService->bulkDestroy(BulkDeleteTaskDTO::fromArray($validated));
 
