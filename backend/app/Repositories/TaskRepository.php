@@ -4,8 +4,10 @@ namespace App\Repositories;
 
 use App\DTOs\BulkDeleteTaskDTO;
 use App\DTOs\TaskDTO;
+use App\Filters\TaskFilters;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 final class TaskRepository
 {
@@ -14,6 +16,34 @@ final class TaskRepository
     public function __construct(Task $task)
     {
         $this->task = $task;
+    }
+
+    /**
+     * @param TaskFilters $taskFilters
+     * @param array|null $pagination
+     * 
+     * @return Collection|LengthAwarePaginator
+     */
+    public function list(
+        TaskFilters $taskFilters, 
+        ?array $pagination = []
+    ): Collection|LengthAwarePaginator {
+        $query =  $this->task
+            ->when(!empty($taskFilters->ids), fn ($builder) => (
+                $builder->whereIn('id', $taskFilters->ids)
+            ))
+            ->when(!empty($taskFilters->statuses), fn ($builder) => (
+                $builder->whereIn('status', $taskFilters->statuses)
+            ));
+
+        return !empty($pagination)
+            ? $query->paginate(
+                $pagination['per_page'], 
+                ['*'], 
+                'page', 
+                $pagination['page']
+            )
+            : $query->get();
     }
 
     public function store(TaskDTO $taskDTO): Task
@@ -36,13 +66,6 @@ final class TaskRepository
             ->whereIn('id', $data['ids'])
             ->where('user_id', $data['user_id'])
             ->delete();
-    }
-
-    public function findByIds(array $ids): Collection
-    {
-        return $this->task
-            ->whereIn('id', $ids)
-            ->get();
     }
 }
 
