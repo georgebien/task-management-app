@@ -76,5 +76,13 @@ final class TaskRepository
             ))
             ->delete();
     }
+
+    public function bulkForceDestroy(BulkDeleteTaskDTO $bulkDeleteTaskDTO): bool
+    {
+        return $this->task
+            ->onlyTrashed()
+            ->whereIn('id', $bulkDeleteTaskDTO->getIds())
+            ->forceDelete();
+    }
 }
 

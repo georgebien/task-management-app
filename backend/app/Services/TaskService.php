@@ -38,14 +38,9 @@ final class TaskService
 
     public function bulkDestroy(BulkDeleteTaskDTO $bulkDeleteTaskDTO): bool
     {
-        $filter = TaskFilters::build(['ids' => $bulkDeleteTaskDTO->getIds()]);
-        $tasks = $this->list($filter);
+        $this->bulkDeleteTasksImage($bulkDeleteTaskDTO);
 
-        $deleted = $this->taskRepository->bulkDestroy($bulkDeleteTaskDTO);
-
-        $this->deleteTaskImages($tasks);
-
-        return $deleted;
+        return $this->taskRepository->bulkDestroy($bulkDeleteTaskDTO);
     }
 
     /**
@@ -55,8 +50,11 @@ final class TaskService
      * 
      * @return void
      */
-    private function deleteTaskImages(Collection $tasks): void
+    public function bulkDeleteTasksImage(BulkDeleteTaskDTO $bulkDeleteTaskDTO): void
     {
+        $filter = TaskFilters::build(['ids' => $bulkDeleteTaskDTO->getIds()]);
+        $tasks = $this->list($filter);
+
         $tasks->each(function (Task $task) {
             if (
                 is_null($task->image_path)
@@ -67,5 +65,17 @@ final class TaskService
 
             Storage::disk('public')->delete($task->image_path);
         });
+    }
+
+    /**
+     * Permanently delete tasks.
+     * 
+     * @param BulkDeleteTaskDTO $bulkDeleteTaskDTO
+     * 
+     * @return bool
+     */
+    public function bulkForceDestroy(BulkDeleteTaskDTO $bulkDeleteTaskDTO): bool
+    {
+        return $this->taskRepository->bulkForceDestroy($bulkDeleteTaskDTO);
     }
 }
