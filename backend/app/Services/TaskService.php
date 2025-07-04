@@ -9,6 +9,7 @@ use App\Models\Task;
 use App\Repositories\TaskRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 
 final class TaskService
 {
@@ -37,6 +38,34 @@ final class TaskService
 
     public function bulkDestroy(BulkDeleteTaskDTO $bulkDeleteTaskDTO): bool
     {
-        return $this->taskRepository->bulkDestroy($bulkDeleteTaskDTO);
+        $filter = TaskFilters::build(['ids' => $bulkDeleteTaskDTO->getIds()]);
+        $tasks = $this->list($filter);
+
+        $deleted = $this->taskRepository->bulkDestroy($bulkDeleteTaskDTO);
+
+        $this->deleteTaskImages($tasks);
+
+        return $deleted;
+    }
+
+    /**
+     * Delete images of the tasks.
+     * 
+     * @param Collection $tasks
+     * 
+     * @return void
+     */
+    private function deleteTaskImages(Collection $tasks): void
+    {
+        $tasks->each(function (Task $task) {
+            if (
+                is_null($task->image_path)
+                || !Storage::disk('public')->exists($task->image_path)
+            ) {
+                return;
+            }
+
+            Storage::disk('public')->delete($task->image_path);
+        });
     }
 }

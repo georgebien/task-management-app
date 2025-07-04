@@ -5,12 +5,12 @@ namespace App\Filters;
 final class TaskFilters
 {
     public function __construct(
-        public array $ids,
-        public array $statuses,
-        public bool $onlyDeleted,
-        public ?string $search,
-        public ?string $orderBy,
-        public ?string $orderDirection
+        private array $ids,
+        private array $statuses,
+        private bool $onlyDeleted,
+        private ?string $search,
+        private ?string $orderBy,
+        private ?string $orderDirection
     ) {}
 
     /**
@@ -30,5 +30,35 @@ final class TaskFilters
             orderBy: $data['order_by'] ?? null,
             orderDirection: $data['order_dir'] ?? null
         );
+    }
+
+    public function getIds(): array
+    {
+        return $this->ids;
+    }
+
+    public function getStatuses(): array
+    {
+        return $this->statuses;
+    }
+
+    public function isOnlyDeleted(): bool
+    {
+        return $this->onlyDeleted;
+    }
+
+    public function getSearch(): ?string
+    {
+        return $this->search;
+    }
+
+    public function getOrderBy(): ?string
+    {
+        return $this->orderBy;
+    }
+
+    public function getOrderDirection(): ?string
+    {
+        return $this->orderDirection;
     }
 }
