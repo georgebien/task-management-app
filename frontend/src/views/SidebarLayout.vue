@@ -6,7 +6,6 @@
         <ul class="nav flex-column">
           <li class="nav-item">
             <router-link class="nav-link" to="/tasks">Tasks</router-link>
-            <router-link class="nav-link" to="/deleted-tasks">Deleted tasks</router-link>
           </li>
         </ul>
       </nav>
@@ -20,6 +19,6 @@
 
 <script>
 export default {
-  name: 'Main',
+  name: 'SidebarLayout',
 }
 </script>
