@@ -33,7 +33,7 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function list(ListTaskRequest $request)
+    public function list(ListTaskRequest $request): JsonResponse
     {
         try {
             $validated = $request->validated();

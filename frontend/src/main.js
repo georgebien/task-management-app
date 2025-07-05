@@ -10,6 +10,7 @@ import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 
 const app = createApp(App);
+const pinia = createPinia();
 
 app.config.globalProperties.$api = api;
 
@@ -19,11 +20,12 @@ router.beforeEach((to, from, next) => {
   next();
 })
 
+app.use(pinia);
+app.use(router);
 app.use(ToastPlugin, {
   position: 'top',
   duration: 5000,
   dismissible: true,
 });
-app.use(createPinia());
-app.use(router);
+
 app.mount('#app');

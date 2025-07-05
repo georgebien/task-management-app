@@ -38,29 +38,35 @@
 </template>
 
 <script>
-import api from '@/library/axios';
+import { useToast } from 'vue-toast-notification';
+import { login } from '../../services/authService';
+import { useUserStore } from '@/stores/userStore';
+import router from '../../router';
+
+const $toast = useToast();
 
 export default {
   data() {
     return {
-      email: '',
-      password: '',
+      email: null,
+      password: null,
     };
   },
   methods: {
     async login() {
-      try {
-        await api.get('/sanctum/csrf-cookie');
-        await api.post('/api/login', {
-          email: this.email,
-          password: this.password,
-        });
-        alert('Login successful');
-      } catch (err) {
-        alert('Login failed');
-        console.error(err);
+      const userStore = useUserStore();
+      const response = await login(this.email, this.password);
+
+      if (!response) {
+        $toast.error('Login failed. Please check your credentials.');
+        return;
       }
-    },
+
+      userStore.setToken(response.data.token);
+      userStore.setUser(response.data.user);
+
+      router.push('/tasks');
+    }
   },
 };
 </script>

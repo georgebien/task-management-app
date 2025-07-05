@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Task\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,3 +26,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/tasks/{id}', [TaskController::class, 'update']);
     Route::delete('/tasks', [TaskController::class, 'bulkDestroy']);
 });
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
