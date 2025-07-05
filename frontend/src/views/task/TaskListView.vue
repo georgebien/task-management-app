@@ -1,8 +1,12 @@
 <template>
   <div class="container my-5">
     <div class="text-center">
-      <h1 class="mb-4">Task Management App</h1>
-      <p class="lead text-muted">Manage your tasks efficiently and stay organized.</p>
+      <h1 class="mb-4">
+        Task Management App
+      </h1>
+      <p class="lead text-muted">
+        Manage your tasks efficiently and stay organized.
+      </p>
     </div>
 
     <!-- You can add more components or UI blocks inside this container -->
@@ -11,8 +15,6 @@
 
 <script>
 export default {
-  name: 'TaskList',
-
   data() {
     return {
       tasks: [],

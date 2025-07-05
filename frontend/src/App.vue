@@ -1,5 +1,8 @@
 <template>
-  <div id="app" :class="{'full-page-center': $route.name === 'Login'}">
+  <div
+    id="app"
+    :class="{'full-page-center': $route.name === 'Login'}"
+  >
     <router-view />
   </div>
 </template>
