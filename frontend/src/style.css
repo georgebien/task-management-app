@@ -14,24 +14,24 @@
 }
 
 html, body {
-  height: 100%; /* This is essential for the body to stretch */
+  height: 100%;
   margin: 0;
-  min-width: 320px; /* Keep this if you need a minimum width */
+  min-width: 320px;
 }
 
 #app {
   display: flex;
-  height: 100%; /* Ensures #app fills the height of the body */
+  height: 100%;
   width: 100%;
 }
 
 .sidebar {
-  width: 250px;
+  width: 180px;
   background-color: #2f2f2f;
   padding: 2rem;
   flex-shrink: 0;
   color: white;
-  height: 100%; /* Ensures the sidebar stretches to #app's height */
+  height: 100%;
 }
 
 .sidebar ul {
@@ -45,14 +45,14 @@ html, body {
 }
 
 .sidebar a {
-  color: #a0a0a0; /* Link color */
+  color: #a0a0a0;
   text-decoration: none;
-  display: block; /* Make links block-level for better click area */
+  display: block;
   padding: 0.5rem 0;
 }
 
 .sidebar a:hover,
-.sidebar a.router-link-active { /* Style for active router-link */
+.sidebar a.router-link-active { 
   color: #646cff;
 }
 

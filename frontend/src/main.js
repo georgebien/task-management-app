@@ -8,6 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
+import 'vue-good-table-next/dist/vue-good-table-next.css';
+import '@vueform/multiselect/themes/default.css';
 
 const app = createApp(App);
 const pinia = createPinia();
