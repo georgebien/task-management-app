@@ -57,14 +57,27 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): Response
+    public function destroy(Request $request): JsonResponse
     {
-        Auth::guard('web')->logout();
+        try {
+            Auth::guard('web')->logout();
 
-        $request->session()->invalidate();
+            $request->session()->invalidate();
 
-        $request->session()->regenerateToken();
+            $request->session()->regenerateToken();
 
-        return response()->noContent();
+            return $this->success('Logout successful.' );
+        } catch (Throwable $th) {
+            Log::error('Login failed', [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+                'request' => $request->all(),
+            ]);
+            
+            return $this->error(
+                'Login failed', 
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }

@@ -9,7 +9,10 @@ const routes = [
     path: '/',
     name: 'Login',
     component: Login,
-    meta: { title: 'Login' },
+    meta: { 
+      title: 'Login',
+      guest: true
+    },
   },
   {
     path: '/tasks',
@@ -19,6 +22,10 @@ const routes = [
         path: '',
         name: 'Tasks',
         component: TaskList,
+        meta: { 
+          title: 'Tasks',
+          requiresAuth: true
+        },
       }
     ],
   },
@@ -33,10 +40,16 @@ router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
 
   if (to.meta.requiresAuth && !userStore.isAuthenticated) {
-    next({ name: 'login' });
-  } else {
-    next();
-  }
+    next({ name: 'Login' });
+    return;
+  } 
+  
+  if (to.meta.guest && userStore.isAuthenticated) {
+    next({ name: 'Tasks' });
+    return;
+  } 
+
+  next();
 });
 
 export default router

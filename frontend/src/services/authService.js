@@ -13,3 +13,13 @@ export async function login(email, password) {
     return false;
   }
 }
+
+export async function logout() {
+  try {
+    const response = await api.post('/api/logout', );
+    
+    return response.data;
+  } catch (err) {
+    return false;
+  }
+}
