@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex min-vh-100">
+  <div class="d-flex">
     <aside
       class="bg-light border-end p-3 d-flex flex-column"
       style="width: 250px;"
@@ -23,13 +23,16 @@
       </div>
 
       <div class="mt-auto">
-        <button class="btn btn-secondary w-100" @click="logout">
+        <button
+          class="btn btn-secondary w-100"
+          @click="logout"
+        >
           Logout
         </button>
       </div>
     </aside>
 
-    <main class="flex-grow-1 p-4">
+    <main class="w-100 p-4">
       <router-view />
     </main>
   </div>
@@ -37,7 +40,7 @@
 
 <script>
 import { useToast } from 'vue-toast-notification';
-import { logout } from '../services/authService';
+import { logout } from '@/services/authService';
 import { useUserStore } from '@/stores/userStore';
 import router from '../router';
 
