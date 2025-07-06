@@ -14,11 +14,13 @@ const routes = [
   {
     path: '/tasks',
     component: SidebarLayout,
-    component: TaskList,
-    meta: { 
-      title: 'Tasks',
-      requiresAuth: true
-    },
+    children: [
+      {
+        path: '',
+        name: 'Tasks',
+        component: TaskList,
+      }
+    ],
   },
 ]
 
