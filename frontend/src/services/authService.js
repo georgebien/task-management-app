@@ -23,3 +23,14 @@ export async function logout() {
     return false;
   }
 }
+
+export async function register(payload) {
+  try {
+    await api.get('/sanctum/csrf-cookie');
+    const response = await api.post('/api/register', payload);
+    
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+}

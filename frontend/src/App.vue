@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    :class="{'full-page-center': $route.name === 'Login'}"
+    :class="{'full-page-center': isFullPageCenter}"
   >
     <router-view />
   </div>
@@ -10,6 +10,12 @@
 <script>
 export default {
   name: 'App',
+
+  computed: {
+    isFullPageCenter() {
+      return  ['Login', 'Register'].includes(this.$route.name);
+    }
+  }
 }
 </script>
 
