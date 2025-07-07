@@ -57,32 +57,32 @@ task-management-app/
 open the folder location in bash or any command line
 cd backend
 
-# 1. Install dependencies
+## 1. Install dependencies
 composer install
 
-# 2. Copy .env and set up database
+## 2. Copy .env and set up database
 cp .env.example .env
 touch database/database.sqlite
 
-# 3. Configure .env (use SQLite)
-# DB_CONNECTION=sqlite
-# DB_DATABASE=database/database.sqlite
+## 3. Configure .env (use SQLite)
+## DB_CONNECTION=sqlite
+## DB_DATABASE=database/database.sqlite
 
-# 4. Generate app key
+## 4. Generate app key
 php artisan key:generate
 
-# 5. Run migrations
+## 5. Run migrations
 php artisan migrate
 
-# 6. Start Laravel backend (http://localhost:8000)
+## 6. Start Laravel backend (http://localhost:8000)
 php artisan serve
 
 ### ▶️ Frontend Setup
 
 cd frontend
 
-# 1. Install dependencies
+## 1. Install dependencies
 npm install
 
-# 2. Start dev server (http://localhost:5173)
+## 2. Start dev server (http://localhost:5173)
 npm run dev
