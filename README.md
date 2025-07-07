@@ -66,8 +66,8 @@ cp .env.example .env
 touch database/database.sqlite
 
 ## 3. Configure .env (use SQLite)
-DB_CONNECTION=sqlite
-DB_DATABASE= (comment this one so laravel can automatically locate where the database.sqlite file is)
+- DB_CONNECTION=sqlite
+- DB_DATABASE= (comment this one so laravel can automatically locate where the database.sqlite file is)
 
 ## 4. Generate app key
 php artisan key:generate
