@@ -22,6 +22,7 @@ It demonstrates best practices in code structure to ensure a maintainable, scala
 - Uses custom FormRequest classes for validation.
 - Uses dependency injection and service classes (e.g. `TaskService`) to keep controllers thin.
 - API routes are versioned and follow RESTful best practices.
+- Uses **SQLite** as the database for portability and simplicity.
 
 ### ✅ Testing
 - Unit testing was not implemented since I focused on the main objective, which is the functionality.
