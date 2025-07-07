@@ -22,7 +22,7 @@ class UpdateTaskRequest extends TaskRequest
                 Rule::unique('tasks', 'title')->ignore($this->route('id')),
             ],
             'content' => 'sometimes|nullable|string|max:500',
-            'status' => 'required|in:.' . implode(',', TaskStatus::getValues()),
+            'status' => 'required|in:' . implode(',', TaskStatus::getValues()),
             'image' => 'sometimes|nullable|image|max:4096',
         ];
     }

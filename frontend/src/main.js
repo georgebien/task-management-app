@@ -6,7 +6,7 @@ import './style.css';
 import App from './App.vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import ToastPlugin from 'vue-toast-notification';
+import { ToastPlugin } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 import 'vue-good-table-next/dist/vue-good-table-next.css';
 import '@vueform/multiselect/themes/default.css';
@@ -24,10 +24,6 @@ router.beforeEach((to, from, next) => {
 
 app.use(pinia);
 app.use(router);
-app.use(ToastPlugin, {
-  position: 'top',
-  duration: 5000,
-  dismissible: true,
-});
+app.use(ToastPlugin);
 
 app.mount('#app');

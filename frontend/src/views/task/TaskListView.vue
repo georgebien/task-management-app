@@ -42,16 +42,15 @@
           <template #table-actions>
             <button
               class="btn btn-primary"
-              @click="createModal"
+              @click="handleNewTask"
             >
-              <i class="bi bi-plus-lg me-2" />
               New Task
             </button>
           </template>
           <template #table-row="props">
             <span v-if="props.column.field == 'actions'">
-              <button class="btn btn-sm btn-primary me-2">Edit</button>
-              <button class="btn btn-sm btn-danger">Delete</button>
+              <button class="btn btn-sm btn-primary me-2" @click.stop="handleEditTask(props.row)">Edit</button>
+              <button class="btn btn-sm btn-danger" @click.stop="handleDeleteTask(props.row)">Delete</button>
             </span>
             <span v-else>
               {{ props.formattedRow[props.column.field] }}
@@ -60,11 +59,14 @@
         </vue-good-table>
       </div>
     </div>
+
     <TaskModal 
-      v-if="isModalVisible"
       ref="taskModal"
-      @close="closeModal"
+      :config="taskModalConfig"
+      :status-options="statusOptions"
+      @refresh-list="getList"
     />
+    <ConfirmationModal  ref="confirmModal"/>
   </div>
 </template>
 
@@ -73,8 +75,11 @@ import { useToast } from 'vue-toast-notification';
 import { VueGoodTable } from 'vue-good-table-next';
 import Multiselect from '@vueform/multiselect';
 import TaskModal from './modal/TaskModal.vue';
+import ConfirmationModal from './modal/ConfirmationModal.vue';
 import { getList } from '@/services/taskService';
 import { debounce, isNull, isEmpty } from 'lodash-es';
+import { statuses } from './constants/status';
+import { remove } from '@/services/taskService';
 
 const $toast = useToast();
 
@@ -84,7 +89,8 @@ export default {
   components: {
     VueGoodTable,
     Multiselect,
-    TaskModal
+    TaskModal,
+    ConfirmationModal
   },
   
   data() {
@@ -162,7 +168,11 @@ export default {
         onlyDeleted: false,
         statuses: []
       },
-      isModalVisible: false,
+      taskModalConfig: {
+        title: null,
+        data: null,
+        isEdit: false
+      }
     };
   },
 
@@ -187,7 +197,7 @@ export default {
       const response = await getList(this.getFilters());
 
       if (!response) {
-        $toast.error('An unexpected error occurred');
+        $toast.error('An unexpected error occurred', {poisition: 'top'});
         return;
       }
 
@@ -201,7 +211,9 @@ export default {
       return tasks.map(task => ({
         id: task.id,
         title: task.title,
-        content: task.content,
+        content: !isNull(task.content)
+          ? task.content
+          : '-',
         status: task.status,
         createdDate: task.created_at,
         updatedDate: task.updated_at,
@@ -273,11 +285,48 @@ export default {
       this.filters.perPage = paging.currentPerPage;
       this.getList();
     },
-    createModal() {
-      this.isModalVisible = true;
+
+    handleNewTask() {
+      this.taskModalConfig.title = 'New task';
+      this.taskModalConfig.isEdit = false;
+
+      this.$refs.taskModal.show();
     },
-    closeModal() {
-      this.isModalVisible = false;
+
+    handleEditTask(row) {
+      this.taskModalConfig.title = 'Edit task';
+      const modal = this.$refs.taskModal;
+
+      this.taskModalConfig.isEdit = true;
+
+      modal.id = row.id;
+      modal.title = row.title;
+      modal.content = row.content;
+      modal.title = row.title;
+      modal.status = statuses[row.status];
+      modal.show();
+    },
+
+    async handleDeleteTask(row) {
+      const confirmed = await this.$refs.confirmModal.open({
+        title: 'Delete Task',
+        message: 'Are you sure you want to delete this task?',
+      });
+
+      if (!confirmed) {
+        return;
+      }
+
+      const { status, data} = await remove({ids: [row.id]});
+
+      if (status !== 200) {
+        $toast.error(data.message, {position: 'top'});
+        return;
+      }
+
+      $toast.success(data.message, {position: 'top'});
+
+      this.getList();
     },
   },
 }
