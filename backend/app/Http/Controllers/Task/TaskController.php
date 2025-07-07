@@ -98,7 +98,10 @@ class TaskController extends Controller
     public function update(UpdateTaskRequest $request, string $id): JsonResponse
     {
         try {
-            $filter = TaskFilters::build(['ids' => [$id]]);
+            $filter = TaskFilters::build([
+                'ids' => [$id],
+                'user_id' => auth()->id()
+            ]);
             $task = $this->taskService->list($filter)->first();
 
             if (is_null($task)) {
