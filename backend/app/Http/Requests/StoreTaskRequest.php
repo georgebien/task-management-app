@@ -15,6 +15,7 @@ class StoreTaskRequest extends TaskRequest
             'title' => 'required|string|unique:tasks,title|max:100',
             'content' => 'sometimes|nullable|string|max:500',
             'image' => 'sometimes|nullable|image|max:4096',
+            'is_draft' => 'required|boolean|in:0,1',
         ];
     }
 }

@@ -215,6 +215,8 @@ export default {
           ? task.content
           : '-',
         status: task.status,
+        imagePath: task.image_path,
+        isDraft: task.is_draft,
         createdDate: task.created_at,
         updatedDate: task.updated_at,
       }));
@@ -294,6 +296,7 @@ export default {
     },
 
     handleEditTask(row) {
+      console.log(row)
       this.taskModalConfig.title = 'Edit task';
       const modal = this.$refs.taskModal;
 
@@ -301,9 +304,12 @@ export default {
 
       modal.id = row.id;
       modal.title = row.title;
-      modal.content = row.content;
+      modal.content = row.content === '-'
+        ? null
+        : row.content;
       modal.title = row.title;
       modal.status = statuses[row.status];
+      modal.isDraft = row.isDraft
       modal.show();
     },
 

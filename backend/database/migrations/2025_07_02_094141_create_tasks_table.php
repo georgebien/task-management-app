@@ -31,6 +31,9 @@ return new class extends Migration
             $table
                 ->string('image_path')
                 ->nullable();
+            $table
+                ->boolean('is_draft')
+                ->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

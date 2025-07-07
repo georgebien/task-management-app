@@ -24,6 +24,7 @@ class UpdateTaskRequest extends TaskRequest
             'content' => 'sometimes|nullable|string|max:500',
             'status' => 'required|in:' . implode(',', TaskStatus::getValues()),
             'image' => 'sometimes|nullable|image|max:4096',
+            'is_draft' => 'required|boolean|in:0,1',
         ];
     }
 }

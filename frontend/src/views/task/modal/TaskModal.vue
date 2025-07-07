@@ -41,7 +41,7 @@
                 placeholder="Select status"
               />
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
               <label>Attachment</label>
               <div class="card">
                 <input 
@@ -51,7 +51,12 @@
                   accept="image/jpeg, image/png, image/jpg"
                 >
               </div>
-              
+            </div>
+            <div class="form-check">
+              <input v-model="isDraft" class="form-check-input" type="checkbox" value="" id="isDraft">
+              <label class="form-check-label" for="isDraft">
+                Save as draft
+              </label>
             </div>
           </div>
           <div class="modal-footer">
@@ -108,6 +113,7 @@ export default {
       content: null,
       status: null,
       image: null,
+      isDraft: false
     }
   },
 
@@ -168,6 +174,12 @@ export default {
       const formData = new FormData();
 
       formData.append('title', this.title);
+      formData.append(
+        'is_draft', 
+        this.isDraft
+          ? 1
+          : 0
+      );
       
       if (!isNull(this.content)) {
         formData.append('content', this.content);
