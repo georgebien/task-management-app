@@ -25,9 +25,14 @@
       <div class="mt-auto">
         <button
           class="btn btn-secondary w-100"
+          :disabled="isLoading"
           @click="logout"
         >
-          Logout
+          <span
+            v-if="isLoading"
+            class="spinner-border spinner-border-sm"
+          />
+          <span>{{ isLoading ? 'Logging out...' : 'Logout' }}</span>
         </button>
       </div>
     </aside>
@@ -51,10 +56,13 @@ export default {
     return {
       email: null,
       password: null,
+      isLoading: false
     };
   },
   methods: {
     async logout() {
+      this.isLoading = true;
+
       const userStore = useUserStore();
       const response = await logout();
 
@@ -64,6 +72,8 @@ export default {
       }
 
       userStore.clearUser();
+
+      this.isLoading = false;
 
       router.push('/');
     }
