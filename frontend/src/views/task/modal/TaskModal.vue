@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="isModalVisible"  class="modal-backdrop fade show" />
+    <div
+      v-if="isModalVisible"
+      class="modal-backdrop fade show"
+    />
     <div
       v-if="isModalVisible"
       class="modal fade show"
@@ -15,7 +18,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
-              {{config.title}}
+              {{ config.title }}
             </h5>
             <button
               type="button"
@@ -26,13 +29,25 @@
           <div class="modal-body">
             <div class="form-group mb-2">
               <label>Title</label>
-              <input v-model="title" type="text" class="form-control" placeholder="Enter title">
+              <input
+                v-model="title"
+                type="text"
+                class="form-control"
+                placeholder="Enter title"
+              >
             </div>
             <div class="form-group mb-2">
               <label>Content</label>
-              <textarea v-model="content" class="form-control" rows="3"></textarea>
+              <textarea
+                v-model="content"
+                class="form-control"
+                rows="3"
+              />
             </div>
-            <div v-show="config.isEdit" class="form-group mb-2">
+            <div
+              v-show="config.isEdit"
+              class="form-group mb-2"
+            >
               <label>Status</label>
               <Multiselect
                 v-model="status"
@@ -45,16 +60,25 @@
               <label>Attachment</label>
               <div class="card">
                 <input 
-                  v-on:change="handleAttachment" 
                   type="file" 
-                  class="form-control-file mt-2"
+                  class="form-control-file mt-2" 
                   accept="image/jpeg, image/png, image/jpg"
+                  @change="handleAttachment"
                 >
               </div>
             </div>
             <div class="form-check">
-              <input v-model="isDraft" class="form-check-input" type="checkbox" value="" id="isDraft">
-              <label class="form-check-label" for="isDraft">
+              <input
+                id="isDraft"
+                v-model="isDraft"
+                class="form-check-input"
+                type="checkbox"
+                value=""
+              >
+              <label
+                class="form-check-label"
+                for="isDraft"
+              >
                 Save as draft
               </label>
             </div>

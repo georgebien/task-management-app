@@ -49,8 +49,14 @@
           </template>
           <template #table-row="props">
             <span v-if="props.column.field == 'actions'">
-              <button class="btn btn-sm btn-primary me-2" @click.stop="handleEditTask(props.row)">Edit</button>
-              <button class="btn btn-sm btn-danger" @click.stop="handleDeleteTask(props.row)">Delete</button>
+              <button
+                class="btn btn-sm btn-primary me-2"
+                @click.stop="handleEditTask(props.row)"
+              >Edit</button>
+              <button
+                class="btn btn-sm btn-danger"
+                @click.stop="handleDeleteTask(props.row)"
+              >Delete</button>
             </span>
             <span v-else>
               {{ props.formattedRow[props.column.field] }}
@@ -66,7 +72,7 @@
       :status-options="statusOptions"
       @refresh-list="getList"
     />
-    <ConfirmationModal  ref="confirmModal"/>
+    <ConfirmationModal ref="confirmModal" />
   </div>
 </template>
 
@@ -197,7 +203,7 @@ export default {
       const response = await getList(this.getFilters());
 
       if (!response) {
-        $toast.error('An unexpected error occurred', {poisition: 'top'});
+        $toast.error('An unexpected error occurred', {position: 'top'});
         return;
       }
 
