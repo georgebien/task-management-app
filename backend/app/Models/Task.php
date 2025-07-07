@@ -18,6 +18,7 @@ class Task extends Model
         'content',
         'status',
         'image_path',
+        'is_draft'
     ];
 
     protected static function booted(): void

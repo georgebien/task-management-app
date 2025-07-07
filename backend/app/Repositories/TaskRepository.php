@@ -29,6 +29,7 @@ final class TaskRepository
         ?array $pagination = []
     ): Collection|LengthAwarePaginator {
         $query =  $this->task
+            ->where('user_id', $taskFilters->getUserId())
             ->when(!empty($taskFilters->getIds()), fn ($builder) => (
                 $builder->whereIn('id', $taskFilters->getIds())
             ))

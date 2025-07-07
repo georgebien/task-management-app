@@ -8,6 +8,7 @@ final class TaskFilters
         private array $ids,
         private array $statuses,
         private bool $onlyDeleted,
+        private string $userId,
         private ?string $search,
         private ?string $orderBy,
         private ?string $orderDirection
@@ -26,6 +27,7 @@ final class TaskFilters
             ids: $data['ids'] ?? [],
             statuses: $data['statuses'] ?? [],
             onlyDeleted: $data['only_deleted'] ?? false,
+            userId: $data['user_id'],
             search: $data['search'] ?? null,
             orderBy: $data['order_by'] ?? null,
             orderDirection: $data['order_dir'] ?? null
@@ -60,5 +62,10 @@ final class TaskFilters
     public function getOrderDirection(): ?string
     {
         return $this->orderDirection;
+    }
+
+    public function getUserId(): string
+    {
+        return $this->userId;
     }
 }

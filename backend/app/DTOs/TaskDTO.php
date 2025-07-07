@@ -10,6 +10,7 @@ final class TaskDTO
         private string $userId,
         private string $title,
         private string $status,
+        private bool $isDraft,
         public ?int $id = null,
         private ?string $content = null,
         private ?string $imagePath = null,
@@ -28,6 +29,7 @@ final class TaskDTO
             userId: $data['user_id'],
             title: $data['title'],
             status: $data['status'] ?? TaskStatus::TO_DO,
+            isDraft: $data['is_draft'] ?? false,
             id: $data['id'] ?? null,
             content: $data['content'] ?? null,
             imagePath: $data['image_path'] ?? null
@@ -42,6 +44,7 @@ final class TaskDTO
             'title' => $this->title,
             'content' => $this->content,
             'status' => $this->status,
+            'is_draft' => $this->isDraft,
             'image_path' => $this->imagePath,
         ];
     }

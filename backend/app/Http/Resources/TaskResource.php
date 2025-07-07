@@ -25,6 +25,7 @@ class TaskResource extends JsonResource
             'content' => $this->content,
             'status' => $this->getStatusValue($this->status),
             'image_path' => $this->image_path,
+            'is_draft' => filter_var($this->is_draft, FILTER_VALIDATE_BOOLEAN),
             'created_at' => $this->formatDate($this->created_at),
             'updated_at' => $this->formatDate($this->updated_at),
         ];
